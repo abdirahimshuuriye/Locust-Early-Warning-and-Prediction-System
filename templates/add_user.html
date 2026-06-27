@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Add New User</h1>
+
+<div class="section">
+
+<form method="POST">
+
+    <label>Full Name</label>
+    <input type="text" name="full_name" required>
+
+    <label>Email</label>
+    <input type="email" name="email" required>
+
+    <label>Password</label>
+    <input type="password" name="password" required>
+
+    <label>Role</label>
+    <select name="role" required>
+        <option value="Admin">Admin</option>
+        <option value="Farmer">Farmer</option>
+        <option value="Organization">Organization</option>
+    </select>
+
+    <br><br>
+
+    <button type="submit" class="btn">
+        Save User
+    </button>
+
+</form>
+
+</div>
+
+{% endblock %}

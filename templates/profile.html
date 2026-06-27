@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>My Profile</h1>
+
+<div class="section">
+    <h2>Account Information</h2>
+
+    <table class="report-table">
+        <tr>
+            <th>User ID</th>
+            <td>{{ user[0] }}</td>
+        </tr>
+
+        <tr>
+            <th>Full Name</th>
+            <td>{{ user[1] }}</td>
+        </tr>
+
+        <tr>
+            <th>Email</th>
+            <td>{{ user[2] }}</td>
+        </tr>
+
+        <tr>
+            <th>Role</th>
+            <td>{{ user[3] }}</td>
+        </tr>
+
+        <tr>
+            <th>Created Date</th>
+            <td>{{ user[4] }}</td>
+        </tr>
+    </table>
+
+    <br>
+
+    <a href="/change-password" class="btn">Change Password</a>
+</div>
+{% endblock %}

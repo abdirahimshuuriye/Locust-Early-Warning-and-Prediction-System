@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Users Management</h1>
+
+<div class="section">
+    <h2>System Users</h2>
+
+    <a href="/add-user" class="btn">Add New User</a>
+    <br><br>
+
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Created Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user[0] }}</td>
+                <td>{{ user[1] }}</td>
+                <td>{{ user[2] }}</td>
+                <td>{{ user[3] }}</td>
+                <td>{{ user[4] }}</td>
+                <td>
+                    <a href="/edit-user/{{ user[0] }}" class="btn">Edit</a>
+
+                    <a href="/delete-user/{{ user[0] }}"
+                       class="btn"
+                       onclick="return confirm('Delete this user?')">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

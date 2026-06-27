@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Reports</h1>
+
+<div class="cards">
+    <div class="card">
+        <h3>Total Predictions</h3>
+        <p>{{ total_predictions }}</p>
+    </div>
+
+    <div class="card">
+        <h3>High Risk</h3>
+        <p>{{ high_risk }}</p>
+    </div>
+
+    <div class="card">
+        <h3>Low Risk</h3>
+        <p>{{ low_risk }}</p>
+    </div>
+
+    <div class="card">
+        <h3>Best Model</h3>
+        <p>SVM</p>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Search & Filter Predictions</h2>
+
+    <form method="GET" action="/reports" class="prediction-form">
+        <div class="form-grid">
+            <div>
+                <label>Region</label>
+                <input type="text" name="region" value="{{ region }}" placeholder="Search region">
+            </div>
+
+            <div>
+                <label>Country</label>
+                <input type="text" name="country" value="{{ country }}" placeholder="Search country">
+            </div>
+
+            <div>
+                <label>Risk Level</label>
+                <select name="risk_level">
+                    <option value="">All</option>
+                    <option value="High Risk" {% if risk_level == "High Risk" %}selected{% endif %}>High Risk</option>
+                    <option value="Low Risk" {% if risk_level == "Low Risk" %}selected{% endif %}>Low Risk</option>
+                </select>
+            </div>
+        </div>
+
+        <br>
+
+        <button type="submit" class="btn">Search</button>
+        <a href="/reports" class="btn">Reset</a>
+
+        {% if session["role"] in ["Admin", "Organization"] %}
+            <a href="/export-csv" class="btn">Export CSV</a>
+            <a href="/export-pdf" class="btn">Export PDF</a>
+        {% endif %}
+    </form>
+</div>
+
+<div class="section">
+    <h2>Prediction History</h2>
+
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th>Region</th>
+                <th>Country</th>
+                <th>Year</th>
+                <th>Month</th>
+                <th>PPT</th>
+                <th>TMAX</th>
+                <th>Soil</th>
+                <th>Result</th>
+                <th>Risk</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for row in predictions %}
+            <tr>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+                <td>{{ row[4] }}</td>
+                <td>{{ row[5] }}</td>
+                <td>{{ row[6] }}</td>
+                <td>{{ row[7] }}</td>
+                <td>{{ row[8] }}</td>
+                <td>{{ row[9] }}</td>
+                <td>{{ row[10] }}</td>
+
+                <td>
+                    <button class="btn"
+                        onclick="openModal(
+                            '{{ row[1] }}',
+                            '{{ row[2] }}',
+                            '{{ row[3] }}',
+                            '{{ row[4] }}',
+                            '{{ row[5] }}',
+                            '{{ row[6] }}',
+                            '{{ row[7] }}',
+                            '{{ row[8] }}',
+                            '{{ row[9] }}',
+                            '{{ row[10] }}'
+                        )">
+                        View
+                    </button>
+
+                    {% if session["role"] == "Admin" %}
+                        <a href="/edit-prediction/{{ row[0] }}" class="btn">
+                            Edit
+                        </a>
+
+                        <a href="/delete-prediction/{{ row[0] }}"
+                           class="btn"
+                           onclick="return confirm('Delete this prediction?')">
+                            Delete
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div id="predictionModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+
+        <h2>Prediction Details</h2>
+
+        <p><strong>Region:</strong> <span id="modalRegion"></span></p>
+        <p><strong>Country:</strong> <span id="modalCountry"></span></p>
+        <p><strong>Start Year:</strong> <span id="modalYear"></span></p>
+        <p><strong>Start Month:</strong> <span id="modalMonth"></span></p>
+        <p><strong>Rainfall / PPT:</strong> <span id="modalPpt"></span></p>
+        <p><strong>Maximum Temperature:</strong> <span id="modalTmax"></span></p>
+        <p><strong>Soil Moisture:</strong> <span id="modalSoil"></span></p>
+        <p><strong>Prediction Result:</strong> <span id="modalResult"></span></p>
+        <p><strong>Risk Level:</strong> <span id="modalRisk"></span></p>
+        <p><strong>Date:</strong> <span id="modalDate"></span></p>
+    </div>
+</div>
+
+<script>
+function openModal(region, country, year, month, ppt, tmax, soil, result, risk, date) {
+    document.getElementById("modalRegion").innerText = region;
+    document.getElementById("modalCountry").innerText = country;
+    document.getElementById("modalYear").innerText = year;
+    document.getElementById("modalMonth").innerText = month;
+    document.getElementById("modalPpt").innerText = ppt;
+    document.getElementById("modalTmax").innerText = tmax;
+    document.getElementById("modalSoil").innerText = soil;
+    document.getElementById("modalResult").innerText = result;
+    document.getElementById("modalRisk").innerText = risk;
+    document.getElementById("modalDate").innerText = date;
+
+    document.getElementById("predictionModal").style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById("predictionModal").style.display = "none";
+}
+</script>
+
+{% endblock %}

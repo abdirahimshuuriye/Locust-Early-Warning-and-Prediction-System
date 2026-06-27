@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Locust Prediction System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <h2>Locust System</h2>
+
+    <a href="/dashboard">Dashboard</a>
+
+    {% if session["role"] in ["Admin", "Organization"] %}
+        <a href="/prediction">Prediction</a>
+    {% endif %}
+
+    {% if session["role"] in ["Admin", "Organization", "Farmer"] %}
+        <a href="/reports">Reports</a>
+        <a href="/risk-map">Risk Map</a>
+    {% endif %}
+
+    {% if session["role"] in ["Admin", "Organization"] %}
+        <a href="/model-comparison">Model Comparison</a>
+    {% endif %}
+
+    {% if session["role"] == "Admin" %}
+        <a href="/users">Users</a>
+    {% endif %}
+
+    <a href="/profile">Profile</a>
+
+    <a href="/feedback">Feedback</a>
+
+    {% if session["role"] == "Admin" %}
+        <a href="/feedbacks">Feedbacks</a>
+        <a href="/activity-logs">Activity Logs</a>
+    {% endif %}
+
+    <a href="/logout">Logout</a>
+
+</div>
+
+<div class="main-content">
+
+    {% block content %}{% endblock %}
+
+    <footer>
+        <p>Locust Prediction System © 2026</p>
+        <p>Developed by Abdirahiim Ali Mohamud / Abdimajiid Ali Mohamud</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Edit Prediction</h1>
+
+<div class="section">
+
+<form method="POST">
+
+    <label>Region</label>
+    <input
+        type="text"
+        name="region"
+        value="{{ prediction[1] }}"
+        required
+    >
+
+    <label>Country</label>
+    <input
+        type="text"
+        name="country"
+        value="{{ prediction[2] }}"
+        required
+    >
+
+    <label>PPT</label>
+    <input
+        type="number"
+        step="0.01"
+        name="ppt"
+        value="{{ prediction[5] }}"
+        required
+    >
+
+    <label>TMAX</label>
+    <input
+        type="number"
+        step="0.01"
+        name="tmax"
+        value="{{ prediction[6] }}"
+        required
+    >
+
+    <label>Soil Moisture</label>
+    <input
+        type="number"
+        step="0.01"
+        name="soil_moisture"
+        value="{{ prediction[7] }}"
+        required
+    >
+
+    <br><br>
+
+    <button class="btn">
+        Update Prediction
+    </button>
+
+    <a href="/reports" class="btn">
+        Cancel
+    </a>
+
+</form>
+
+</div>
+
+{% endblock %}

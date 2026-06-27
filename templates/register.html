@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register - Locust Prediction System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="auth-body">
+
+<div class="auth-wrapper">
+
+    <div class="auth-form-box">
+
+        <h1>Create Account</h1>
+
+        <p class="auth-subtitle">
+            Register as a Farmer or Organization user to access the Locust Early Warning and Prediction System.
+        </p>
+
+        {% if success %}
+            <p class="auth-success">
+                {{ success }}
+            </p>
+        {% endif %}
+
+        {% if error %}
+            <p class="auth-error">
+                {{ error }}
+            </p>
+        {% endif %}
+
+        <form method="POST" action="/register">
+
+            <label>Full Name</label>
+            <input type="text" name="full_name" placeholder="Enter full name" required>
+
+            <label>Email Address</label>
+            <input type="email" name="email" placeholder="Enter email" required>
+
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Enter password" required>
+
+            <label>Confirm Password</label>
+            <input type="password" name="confirm_password" placeholder="Confirm password" required>
+
+            <label>Role</label>
+            <select name="role" required>
+                <option value="">Select Role</option>
+                <option value="Farmer">Farmer</option>
+                <option value="Organization">Organization</option>
+            </select>
+
+            <button type="submit" class="btn login-btn">
+                Create Account
+            </button>
+
+        </form>
+
+        <div class="auth-divider"></div>
+
+        <p class="auth-bottom-text">
+            Already have an account?
+            <a href="/login">Login Here</a>
+        </p>
+
+        <p class="auth-bottom-text">
+            <a href="/">Back to Home</a>
+        </p>
+
+    </div>
+
+    <div class="auth-image-box">
+
+        <img src="{{ url_for('static', filename='images/farmer.jpeg') }}"
+             alt="Farmer">
+
+        <div class="auth-image-overlay">
+
+            <h2>Farmer Registration</h2>
+
+            <p>
+                Join the Locust Early Warning and Prediction System to receive
+                outbreak predictions, monitoring updates, and automatic email alerts
+                whenever high-risk locust conditions are detected.
+            </p>
+
+            <div class="auth-stats">
+                <div>
+                    <h3>97.85%</h3>
+                    <span>Model Accuracy</span>
+                </div>
+
+                <div>
+                    <h3>Email Alerts</h3>
+                    <span>High Risk Notifications</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

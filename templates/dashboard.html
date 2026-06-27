@@ -1,0 +1,304 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard-header">
+    <div>
+        <h1>Dashboard</h1>
+        <p>
+            Welcome, <strong>{{ session["full_name"] }}</strong>.
+            You are logged in as
+            <span class="role-badge">{{ session["role"] }}</span>
+        </p>
+    </div>
+
+    <div class="system-status">
+        <span>System Status</span>
+        <strong>Active</strong>
+    </div>
+</div>
+
+<div class="section dashboard-welcome">
+    <h2>Locust Early Warning and Prediction System</h2>
+    <p>
+        This dashboard provides an overview of locust outbreak predictions,
+        high risk alerts, model performance, and regional monitoring results.
+    </p>
+</div>
+
+<div class="cards dashboard-cards">
+
+    <a href="/reports" class="card-link">
+        <div class="card stat-card">
+            <div class="card-icon">📊</div>
+            <h3>Total Predictions</h3>
+            <p>{{ total_predictions }}</p>
+        </div>
+    </a>
+
+    <a href="/reports?risk_level=High Risk" class="card-link">
+        <div class="card stat-card danger-card">
+            <div class="card-icon">⚠️</div>
+            <h3>High Risk Alerts</h3>
+            <p>{{ high_risk_alerts }}</p>
+        </div>
+    </a>
+
+    <a href="/reports?risk_level=Low Risk" class="card-link">
+        <div class="card stat-card safe-card">
+            <div class="card-icon">✅</div>
+            <h3>Low Risk Alerts</h3>
+            <p>{{ low_risk_alerts }}</p>
+        </div>
+    </a>
+
+    {% if session["role"] == "Admin" %}
+    <a href="/users" class="card-link">
+        <div class="card stat-card">
+            <div class="card-icon">👥</div>
+            <h3>Total Users</h3>
+            <p>{{ total_users }}</p>
+        </div>
+    </a>
+    {% else %}
+    <a href="/profile" class="card-link">
+        <div class="card stat-card">
+            <div class="card-icon">👤</div>
+            <h3>My Account</h3>
+            <p>{{ session["role"] }}</p>
+        </div>
+    </a>
+    {% endif %}
+
+</div>
+
+<div class="cards dashboard-cards">
+
+    <a href="/reports" class="card-link">
+        <div class="card stat-card">
+            <div class="card-icon">🎯</div>
+            <h3>Model Accuracy</h3>
+            <p>{{ model_accuracy }}</p>
+        </div>
+    </a>
+
+    <a href="/reports?risk_level=High Risk" class="card-link">
+        <div class="card stat-card danger-card">
+            <div class="card-icon">📈</div>
+            <h3>High Risk Rate</h3>
+            <p>{{ high_risk_percentage }}%</p>
+        </div>
+    </a>
+
+    <a href="/reports?risk_level=Low Risk" class="card-link">
+        <div class="card stat-card safe-card">
+            <div class="card-icon">📉</div>
+            <h3>Low Risk Rate</h3>
+            <p>{{ low_risk_percentage }}%</p>
+        </div>
+    </a>
+
+    <a href="/reports" class="card-link">
+        <div class="card stat-card">
+            <div class="card-icon">🤖</div>
+            <h3>Best Model</h3>
+            <p>{{ best_model }}</p>
+        </div>
+    </a>
+
+</div>
+
+<div class="section">
+    <h2>Quick Actions</h2>
+
+    <p class="section-note">
+        Frequently used system operations.
+    </p>
+
+    {% if session["role"] == "Admin" or session["role"] == "Organization" %}
+        <a href="/prediction" class="btn">New Prediction</a>
+    {% endif %}
+
+    <a href="/reports" class="btn">View Reports</a>
+    <a href="/risk-map" class="btn">Risk Map</a>
+    <a href="/profile" class="btn">My Profile</a>
+
+    {% if session["role"] == "Admin" %}
+        <a href="/users" class="btn">Manage Users</a>
+        <a href="/activity-logs" class="btn">Activity Logs</a>
+    {% endif %}
+</div>
+
+<div class="dashboard-grid">
+
+    <div class="section chart-card">
+        <h2>Risk Level Distribution</h2>
+        <p class="section-note">
+            Comparison between high risk and low risk predictions.
+        </p>
+
+        <div class="chart-container">
+            <canvas id="riskPieChart"></canvas>
+        </div>
+    </div>
+
+    <div class="section chart-card">
+        <h2>Risk Level Summary</h2>
+        <p class="section-note">
+            Bar chart showing the number of predictions by risk level.
+        </p>
+
+        <div class="chart-container">
+            <canvas id="riskBarChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<div class="section chart-card">
+    <h2>Monthly Prediction Analytics</h2>
+    <p class="section-note">
+        Monthly distribution of locust outbreak prediction records.
+    </p>
+
+    <div class="chart-wide">
+        <canvas id="monthlyChart"></canvas>
+    </div>
+</div>
+
+<div class="section chart-card">
+    <h2>Prediction Trend Analysis</h2>
+    <p class="section-note">
+        Trend of prediction records over time.
+    </p>
+
+    <div class="chart-wide">
+        <canvas id="trendChart"></canvas>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Recent Predictions</h2>
+
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th>Region</th>
+                <th>Country</th>
+                <th>Risk Level</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for row in recent_predictions %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+
+                <td>
+                    {% if row[2] == "High Risk" %}
+                        <span class="risk-badge high-risk">High Risk</span>
+                    {% else %}
+                        <span class="risk-badge low-risk">Low Risk</span>
+                    {% endif %}
+                </td>
+
+                <td>{{ row[3] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const highRisk = Number("{{ high_risk_alerts | default(0) }}");
+    const lowRisk = Number("{{ low_risk_alerts | default(0) }}");
+
+    const monthNames = {{ month_names | tojson }};
+    const monthCounts = {{ month_counts | tojson }};
+
+    const trendMonths = {{ trend_months | tojson }};
+    const trendCounts = {{ trend_counts | tojson }};
+
+    new Chart(document.getElementById('riskPieChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['High Risk', 'Low Risk'],
+            datasets: [{
+                data: [highRisk, lowRisk],
+                backgroundColor: ['#b02a37', '#198754'],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    new Chart(document.getElementById('riskBarChart'), {
+        type: 'bar',
+        data: {
+            labels: ['High Risk', 'Low Risk'],
+            datasets: [{
+                label: 'Number of Predictions',
+                data: [highRisk, lowRisk],
+                backgroundColor: ['#b02a37', '#198754']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    new Chart(document.getElementById('monthlyChart'), {
+        type: 'bar',
+        data: {
+            labels: monthNames,
+            datasets: [{
+                label: 'Monthly Predictions',
+                data: monthCounts,
+                backgroundColor: '#0f5132'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    new Chart(document.getElementById('trendChart'), {
+        type: 'line',
+        data: {
+            labels: trendMonths,
+            datasets: [{
+                label: 'Prediction Trend',
+                data: trendCounts,
+                borderColor: '#0f5132',
+                backgroundColor: '#0f5132',
+                fill: false,
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+</script>
+
+{% endblock %}

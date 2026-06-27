@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard-header">
+    <div>
+        <h1>Somalia Locust Risk Map</h1>
+        <p>
+            Regional monitoring page showing the latest locust outbreak risk
+            status across Somalia regions.
+        </p>
+    </div>
+
+    <div class="system-status">
+        <span>Map Status</span>
+        <strong>Live</strong>
+    </div>
+</div>
+
+<div class="cards dashboard-cards">
+
+    <div class="card stat-card">
+        <div class="card-icon">🗺️</div>
+        <h3>Total Regions</h3>
+        <p>{{ total_regions }}</p>
+    </div>
+
+    <div class="card stat-card danger-card">
+        <div class="card-icon">⚠️</div>
+        <h3>High Risk Regions</h3>
+        <p>{{ high_risk_count }}</p>
+    </div>
+
+    <div class="card stat-card safe-card">
+        <div class="card-icon">✅</div>
+        <h3>Low Risk Regions</h3>
+        <p>{{ low_risk_count }}</p>
+    </div>
+
+    <div class="card stat-card">
+        <div class="card-icon">ℹ️</div>
+        <h3>No Data Regions</h3>
+        <p>{{ no_data_count }}</p>
+    </div>
+
+</div>
+
+<div class="dashboard-grid">
+
+    <div class="section">
+        <h2>Risk Level Legend</h2>
+
+        <div class="legend-box">
+            <span class="legend-item high-risk-legend"></span>
+            <p>High Risk</p>
+
+            <span class="legend-item low-risk-legend"></span>
+            <p>Low Risk</p>
+
+            <span class="legend-item no-data-legend"></span>
+            <p>No Data</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Latest Prediction Summary</h2>
+
+        {% if latest_region %}
+            <p>
+                Latest prediction was recorded in
+                <strong>{{ latest_region }}</strong>
+                with
+                <strong>{{ latest_risk }}</strong>
+                risk level on
+                <strong>{{ latest_date }}</strong>.
+            </p>
+        {% else %}
+            <p>No prediction record is available yet.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+<div class="section chart-card">
+    <h2>Risk Distribution Chart</h2>
+
+    <p class="section-note">
+        This chart summarizes the number of high risk, low risk, and no-data regions.
+    </p>
+
+    <div class="chart-wide">
+        <canvas id="riskMapChart"></canvas>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Regional Risk Status</h2>
+
+    <p class="section-note">
+        This section displays the latest locust outbreak risk level for each
+        Somalia region based on prediction records stored in the system.
+    </p>
+
+    <input type="text"
+           id="regionSearch"
+           class="search-input"
+           placeholder="Search region...">
+
+    <div class="risk-map-grid">
+
+        {% for item in map_data %}
+            <div class="risk-region
+                {% if item.risk == 'High Risk' %}
+                    high-risk-region
+                {% elif item.risk == 'Low Risk' %}
+                    low-risk-region
+                {% else %}
+                    no-data-region
+                {% endif %}
+            ">
+
+                <div class="risk-region-header">
+                    <h3>{{ item.region }}</h3>
+
+                    {% if item.risk == "High Risk" %}
+                        <span class="risk-label">High</span>
+                    {% elif item.risk == "Low Risk" %}
+                        <span class="risk-label">Low</span>
+                    {% else %}
+                        <span class="risk-label">No Data</span>
+                    {% endif %}
+                </div>
+
+                <p><strong>Risk Level:</strong> {{ item.risk }}</p>
+                <p><strong>Last Update:</strong> {{ item.date }}</p>
+
+                {% if item.risk == "High Risk" %}
+                    <p class="risk-advice">
+                        Immediate monitoring and response action is recommended.
+                    </p>
+                {% elif item.risk == "Low Risk" %}
+                    <p class="risk-advice">
+                        Continue routine monitoring.
+                    </p>
+                {% else %}
+                    <p class="risk-advice">
+                        No recent prediction data available.
+                    </p>
+                {% endif %}
+
+            </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const highRiskCount = Number("{{ high_risk_count | default(0) }}");
+    const lowRiskCount = Number("{{ low_risk_count | default(0) }}");
+    const noDataCount = Number("{{ no_data_count | default(0) }}");
+
+    new Chart(document.getElementById('riskMapChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['High Risk', 'Low Risk', 'No Data'],
+            datasets: [{
+                data: [highRiskCount, lowRiskCount, noDataCount],
+                backgroundColor: ['#b02a37', '#198754', '#6c757d'],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    document.getElementById("regionSearch").addEventListener("keyup", function() {
+        let value = this.value.toLowerCase();
+        let cards = document.querySelectorAll(".risk-region");
+
+        cards.forEach(card => {
+            let region = card.querySelector("h3").innerText.toLowerCase();
+
+            if (region.includes(value)) {
+                card.style.display = "block";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    });
+</script>
+
+{% endblock %}

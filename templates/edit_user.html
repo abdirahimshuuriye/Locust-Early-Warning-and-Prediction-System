@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Edit User</h1>
+
+<div class="section">
+
+<form method="POST">
+
+    <label>Full Name</label>
+    <input type="text" name="full_name" value="{{ user[1] }}" required>
+
+    <label>Email</label>
+    <input type="email" name="email" value="{{ user[2] }}" required>
+
+    <label>Password</label>
+    <input type="text" name="password" value="{{ user[3] }}" required>
+
+    <label>Role</label>
+    <select name="role" required>
+        <option value="Admin" {% if user[4] == "Admin" %}selected{% endif %}>Admin</option>
+        <option value="Farmer" {% if user[4] == "Farmer" %}selected{% endif %}>Farmer</option>
+        <option value="Organization" {% if user[4] == "Organization" %}selected{% endif %}>Organization</option>
+    </select>
+
+    <br><br>
+
+    <button type="submit" class="btn">
+        Update User
+    </button>
+
+</form>
+
+</div>
+
+{% endblock %}

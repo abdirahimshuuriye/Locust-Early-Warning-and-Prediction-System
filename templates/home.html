@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Locust Early Warning System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="home-body">
+
+<nav class="home-navbar">
+    <h2>Locust System</h2>
+
+    <div>
+        <a href="/login">Login</a>
+        <a href="/register" class="home-register-btn">Register</a>
+    </div>
+</nav>
+
+<section class="hero-section">
+    <div class="hero-content">
+
+        <div class="hero-text">
+            <h1>Development of an Early Warning and Prediction System Using LR and SVM</h1>
+
+            <p>
+                A machine learning-based platform for predicting locust outbreak risks,
+                monitoring regional threats, and sending early warning alerts to farmers.
+            </p>
+
+            <div class="hero-buttons">
+                <a href="/login" class="btn">Login</a>
+                <a href="/register" class="btn secondary-btn">Create Account</a>
+            </div>
+        </div>
+
+        <div class="hero-image-box">
+            <img src="{{ url_for('static', filename='images/home-locust.jpeg') }}"
+                 alt="Locust"
+                 class="hero-image">
+        </div>
+
+    </div>
+</section>
+
+<section class="home-features">
+    <h2>System Features</h2>
+
+    <div class="feature-grid">
+
+        <div class="feature-card">
+            <div class="feature-icon">🤖</div>
+            <h3>Machine Learning Prediction</h3>
+            <p>
+                Predicts locust outbreak risk using rainfall, temperature,
+                and soil moisture data.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🗺️</div>
+            <h3>Risk Map Monitoring</h3>
+            <p>
+                Displays regional locust risk status across Somalia using
+                clear visual risk maps.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">📧</div>
+            <h3>Email Alert System</h3>
+            <p>
+                Sends automatic warning emails to registered farmers when
+                high-risk conditions are detected.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Reports and Analytics</h3>
+            <p>
+                Provides dashboards, charts, reports, and export tools for
+                better decision-making.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<section class="home-info-section">
+    <div>
+        <img src="{{ url_for('static', filename='images/swarm.jpeg') }}"
+             alt="Locust swarm">
+    </div>
+
+    <div>
+        <h2>Why Early Warning Matters</h2>
+        <p>
+            Locust swarms can destroy crops and vegetation within a short time.
+            Early prediction helps farmers, organizations, and authorities respond
+            before serious damage occurs.
+        </p>
+    </div>
+</section>
+
+<section class="home-info-section reverse">
+    <div>
+        <h2>Supporting Farmers</h2>
+        <p>
+            When a high-risk outbreak is detected, the system sends email alerts
+            to registered farmers so they can monitor their farms and prepare
+            early control actions.
+        </p>
+    </div>
+
+    <div>
+        <img src="{{ url_for('static', filename='images/farmer.jpeg') }}"
+             alt="Farmers">
+    </div>
+</section>
+
+<footer class="home-footer">
+    <p>Locust Prediction System © 2026</p>
+    <p>Developed by Abdirahiim Ali Mohamud / Abdimajiid Ali Mohamud</p>
+</footer>
+
+</body>
+</html>
