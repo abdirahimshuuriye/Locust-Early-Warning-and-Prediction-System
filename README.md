@@ -234,7 +234,7 @@ Graduation Project
 
 # Supervisor
 
-Supervisor
+Prof. Eng. Abdulle Hassan Mohamud.
 
 ---
 
